@@ -1,0 +1,43 @@
+#! /bin/sh
+# this creates a VMS compilation script
+
+outfile=VMS_BUILD.COM
+
+cat > $outfile << END_OF_INPUT
+\$set noon
+\$define sys sys\$library
+\$define x11 decw\$include
+\$!
+\$write sys\$output "Compiling..."
+END_OF_INPUT
+
+for i in $1
+do
+  echo '$cc'" $i:r" >> $outfile
+done
+
+echo '$cc vms-build.c' >> $outfile
+
+cat >> $outfile << END_OF_INPUT
+\$!
+\$write sys\$output "Linking..."
+END_OF_INPUT
+
+echo '$link xloadimage, -' >> $outfile
+for i in $2
+do
+  if [ "$i" != "xloadimage.o" ]; then
+    echo "        $i:r, -" >> $outfile
+  fi
+done
+
+echo "        vms-build.o, -" >> $outfile
+
+cat >> $outfile << END_OF_INPUT
+        sys\$input:/options
+sys\$share:decw\$xlibshr/share
+\$!
+\$exit
+END_OF_INPUT
+
+chmod -w+x $outfile

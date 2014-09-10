@@ -1,0 +1,14 @@
+#!/bin/sh
+echo "Insert an empty floppy disk and push a key.  If you want to abort"
+echo "the process, type q..."
+read answer
+
+if [ "$answer" == "q" ]; then
+  exit 1
+fi
+
+# format the floppy
+fdformat -f
+
+# tar the stuff onto the floppy
+tar cf /dev/fd0 $*

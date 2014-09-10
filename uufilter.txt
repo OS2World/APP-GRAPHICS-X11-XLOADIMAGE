@@ -1,0 +1,66 @@
+
+
+
+UUFILTER(1)              USER COMMANDS                UUFILTER(1)
+
+
+
+NAME
+     uufilter - decode uuencoded files to stdout
+
+SYNOPSIS
+     _u_u_f_i_l_t_e_r [-f _o_u_t_f_i_l_e_n_a_m_e] [-l] [-s] [-v] [_i_n_f_i_l_e_n_a_m_e]
+
+DESCRIPTION
+     _U_u_f_i_l_t_e_r is  a  "smart"  uuencoded  file  decoder  that  can
+     optionally dump the file to stdout.
+
+     If no filename is supplied, input is read from stdin.
+
+     _U_u_f_i_l_t_e_r automatically ignores lines that do not  appear  to
+     be  part of the uuencoded file.  This is particularly useful
+     in uudecoding files that have been concatenated from several
+     email  or news postings without stripping off the headers or
+     otherwise editting extraneous content.
+
+OPTIONS
+     -f _f_i_l_e_n_a_m_e
+             Dump output to _f_i_l_e_n_a_m_e rather than the name  speci-
+             fied in the uuencoded file.
+
+     -l      Lenient mode.  This is useful if  passed  through  a
+             mailer that adds trailing spaces.
+
+     -s      Dump output to stdout rather than  to  the  filename
+             indicated in the uuencoded file.
+
+     -v      Verbose mode; talks about what's going on.
+
+AUTHOR
+     Jim Frost (jimf@centerline.com)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sun Release 4.1   Last change: 21 October 1993                  1
+
+
+

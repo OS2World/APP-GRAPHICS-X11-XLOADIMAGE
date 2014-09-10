@@ -1,0 +1,34 @@
+.TH UUFILTER 1 "21 October 1993"
+.SH NAME
+uufilter - decode uuencoded files to stdout
+.SH SYNOPSIS
+\fIuufilter\fR [-f \fIoutfilename\fR] [-l] [-s] [-v] [\fIinfilename\fR]
+.SH DESCRIPTION
+\fIUufilter\fR is a "smart" uuencoded file decoder that can optionally
+dump the file to stdout.
+.PP
+If no filename is supplied, input is read from stdin.
+.PP
+\fIUufilter\fR automatically ignores lines that do not appear to be
+part of the uuencoded file.  This is particularly useful in uudecoding
+files that have been concatenated from several email or news postings
+without stripping off the headers or otherwise editting extraneous
+content.
+.SH OPTIONS
+.TP 8
+-f \fIfilename\fR
+Dump output to \fIfilename\fR rather than the name specified in the
+uuencoded file.
+.TP
+-l
+Lenient mode.  This is useful if passed through a mailer that adds
+trailing spaces.
+.TP
+-s
+Dump output to stdout rather than to the filename indicated in the
+uuencoded file.
+.TP
+-v
+Verbose mode; talks about what's going on.
+.SH AUTHOR
+Jim Frost (jimf@centerline.com)

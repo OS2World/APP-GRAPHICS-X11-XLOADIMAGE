@@ -1,0 +1,81 @@
+#! /bin/sh
+# this program is used for generating Imakefiles
+
+OUT=Imakefile
+
+cat > $OUT << END_OF_INPUT
+# Imakefile for building within the X11 source tree.
+# This Imakefile was automatically generated from Makefile.std.
+#
+# If you have problems building, you should read the README file and
+# consider using Makefile.std.
+#
+# If you use gcc, you should read the README file and consider using
+# Makefile.std.
+
+    SYSPATHFILE = $(XAPPLOADDIR)/Xloadimage
+        DEFINES = -DSYSPATHFILE=\"$(SYSPATHFILE)\"
+        DEPLIBS = $(DEPXLIB)
+LOCAL_LIBRARIES = $(XLIB)
+SYS_LIBRARIES   = -lm
+
+#ifdef HPArchitecture
+      CCOPTIONS = -Aa -D_HPUX_SOURCE
+#endif
+
+# Comment out either of the next two lines if you don't have TIFF or JPEG libs
+#define HAS_TIFF
+#define HAS_JPEG
+
+#ifdef HAS_TIFF
+TIFF_DEFS = -DHAS_TIFF -I/usr/local/include
+ TIFF_LIB = -L/usr/local/lib/tiff -ltiff
+ TIFF_SRC = tiff.c
+ TIFF_OBJ = tiff.o
+#endif
+
+#ifdef HAS_JPEG
+JPEG_DEFS = -DHAS_JPEG -I/usr/local/include/jpeg
+ JPEG_LIB = -L/usr/local/lib/jpeg -ljpeg
+ JPEG_SRC = jpeg.c
+ JPEG_OBJ = jpeg.o
+#endif
+
+  EXTRA_DEFINES = $(TIFF_DEFS) $(JPEG_DEFS)
+LOCAL_LIBRARIES = $(TIFF_LIB)  $(JPEG_LIB) $(XLIB)
+
+END_OF_INPUT
+
+echo "SRCS = $1"' $(TIFF_SRC) $(JPEG_SRC)' >> $OUT
+echo "OBJS = $2"' $(TIFF_OBJ) $(JPEG_OBJ)' >> $OUT
+
+cat >> $OUT << END_OF_INPUT
+
+AllTarget(xloadimage uufilter)
+ComplexProgramTarget(xloadimage)
+NormalProgramTarget(uufilter,uufilter.o,,,)
+InstallProgram(uufilter,$(BINDIR))
+InstallManPage(uufilter,$(MANDIR))
+
+install:: $(SYSPATHFILE)
+	$(RM) $(BINDIR)/xview $(BINDIR)/xsetbg
+	cd $(BINDIR); $(LN) xloadimage xview; $(LN) xloadimage xsetbg
+
+clean::
+	/bin/rm -f build.c
+
+build.c:
+	./build-info
+
+$(SYSPATHFILE):
+	@echo "*** Creating default $(SYSPATHFILE) since you"
+	@echo "*** don't have one. This file is used to set up default places"
+	@echo "*** and names to look for images.  You probably want to edit"
+	@echo "*** it for your site.  See the xloadimage manual page for"
+	@echo "*** details on the contents of this file."
+	cp xloadimagerc $(SYSPATHFILE)
+	chmod a+r $(SYSPATHFILE)
+
+END_OF_INPUT
+
+chmod 444 $OUT

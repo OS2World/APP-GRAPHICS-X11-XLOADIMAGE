@@ -1,0 +1,34 @@
+tiff.o: Undefined symbol _TIFFOpen referenced from text segment
+tiff.o: Undefined symbol _TIFFGetFieldDefaulted referenced from text segment
+tiff.o: Undefined symbol _TIFFGetFieldDefaulted referenced from text segment
+tiff.o: Undefined symbol _TIFFGetFieldDefaulted referenced from text segment
+tiff.o: Undefined symbol _TIFFGetFieldDefaulted referenced from text segment
+tiff.o: Undefined symbol _TIFFGetFieldDefaulted referenced from text segment
+tiff.o: Undefined symbol _TIFFGetFieldDefaulted referenced from text segment
+tiff.o: Undefined symbol _TIFFGetFieldDefaulted referenced from text segment
+tiff.o: Undefined symbol _TIFFScanlineSize referenced from text segment
+tiff.o: Undefined symbol _TIFFGetField referenced from text segment
+tiff.o: Undefined symbol _TIFFGetField referenced from text segment
+tiff.o: Undefined symbol _TIFFClose referenced from text segment
+tiff.o: Undefined symbol _TIFFReadScanline referenced from text segment
+tiff.o: Undefined symbol _TIFFGetField referenced from text segment
+tiff.o: Undefined symbol _TIFFReadScanline referenced from text segment
+tiff.o: Undefined symbol _TIFFReadScanline referenced from text segment
+tiff.o: Undefined symbol _TIFFReadScanline referenced from text segment
+tiff.o: Undefined symbol _TIFFClose referenced from text segment
+tiff.o: Undefined symbol _TIFFOpen referenced from text segment
+tiff.o: Undefined symbol _TIFFSetField referenced from text segment
+tiff.o: Undefined symbol _TIFFSetField referenced from text segment
+tiff.o: Undefined symbol _TIFFSetField referenced from text segment
+tiff.o: Undefined symbol _TIFFSetField referenced from text segment
+tiff.o: Undefined symbol _TIFFSetField referenced from text segment
+tiff.o: Undefined symbol _TIFFSetField referenced from text segment
+tiff.o: Undefined symbol _TIFFSetField referenced from text segment
+tiff.o: Undefined symbol _TIFFSetField referenced from text segment
+tiff.o: Undefined symbol _TIFFSetField referenced from text segment
+tiff.o: More undefined symbol _TIFFSetField refs follow
+tiff.o: Undefined symbol _TIFFWriteScanline referenced from text segment
+tiff.o: Undefined symbol _TIFFWriteScanline referenced from text segment
+tiff.o: Undefined symbol _TIFFWriteScanline referenced from text segment
+tiff.o: Undefined symbol _TIFFClose referenced from text segment
+X11MAKE.EXE: *** [xloadimage.exe] Error 1

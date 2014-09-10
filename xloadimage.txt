@@ -1,0 +1,924 @@
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+NAME
+     xloadimage, xsetbg, xview - load images into an  X11  window
+     or onto the root window
+
+SYNOPSIS
+     _x_l_o_a_d_i_m_a_g_e [global_options] {[image_options] image ...}
+     _x_l_o_a_d_i_m_a_g_e [global_options] [image_options] stdin < image
+
+DESCRIPTION
+     _X_l_o_a_d_i_m_a_g_e displays images in an X11 window, loads them onto
+     the  root  window,  or  writes them into a file.  Many image
+     types are recognized; use  the  -_s_u_p_p_o_r_t_e_d  option  to  list
+     them.
+
+     If the filename _s_t_d_i_n is given,  xloadimage  will  read  the
+     image from standard input if this capability is supported by
+     the loader for that image type (most types do support  read-
+     ing from stdin).
+
+     If the destination display  cannot  support  the  number  of
+     colors  in the image, the image will be dithered (monochrome
+     destination) or have its colormap  reduced  (color  destina-
+     tion)  as  appropriate.  This can also be done forcibly with
+     the -_h_a_l_f_t_o_n_e, -_d_i_t_h_e_r, and -_c_o_l_o_r_s options.
+
+     A variety of image manipulations can be specified, including
+     gamma  correction,  brightening, clipping, dithering, depth-
+     reduction, rotation, and zooming.  Most of  these  manipula-
+     tions have simple implementations; speed was opted for above
+     accuracy.
+
+     If you are viewing a large image in a  window,  the  initial
+     window will be at most 90% of the size of the display unless
+     the window manager does not  correctly  handle  window  size
+     requests  or if you've used the -_f_u_l_l_s_c_r_e_e_n option.  You may
+     move the image around in the window  by  dragging  with  the
+     first  mouse  button.  The cursor will indicate which direc-
+     tions you may drag, if any.  You may exit the window by typ-
+     ing 'q' or '^C' when the keyboard focus is on the window.
+
+     If more than one image file  is  specified  on  the  command
+     line, each image will be shown in order (except if -_m_e_r_g_e or
+     -_g_o_t_o are being used).
+
+     A wide variety of common image manipulations can be done  by
+     mixing  and matching the available options.  See the section
+     entitled _H_I_N_T_S _F_O_R _G_O_O_D _I_M_A_G_E _D_I_S_P_L_A_Y_S for some ideas.
+
+     The -_d_u_m_p option causes an image to be  written  to  a  file
+     rather  than displayed after processing.  This allows you to
+     read an image, perform a number of processing operations  on
+     it,   and  save  the  resultant  image.   This  also  allows
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                    1
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+     translation from any of the recognized image types into  any
+     of the formats that support dumping.
+
+     _X_s_e_t_b_g is equivalent to _x_l_o_a_d_i_m_a_g_e -_o_n_r_o_o_t -_q_u_i_e_t and  _x_v_i_e_w
+     is equivalent to _x_l_o_a_d_i_m_a_g_e -_v_i_e_w -_v_e_r_b_o_s_e.
+
+RESOURCE CLASS
+     _X_l_o_a_d_i_m_a_g_e uses the resource class name _X_l_o_a_d_i_m_a_g_e for  win-
+     dow  managers  which  need  this  resource  set.   This name
+     changed in version 2.00 and  2.01;  some  previous  versions
+     used the name _X_L_o_a_d_I_m_a_g_e (which was difficult to predict) or
+     _x_l_o_a_d_i_m_a_g_e (which conflicted with class naming conventions).
+
+GLOBAL OPTIONS
+     The  following  options  affect  the  global  operation   of
+     _x_l_o_a_d_i_m_a_g_e.   They  may be specified anywhere on the command
+     line.  Additionally the -_g_l_o_b_a_l option can be used to  force
+     an image option to apply to all images.
+
+     -border _c_o_l_o_r
+             This sets the background portion of the window which
+             is not covered by any images to be _c_o_l_o_r.
+
+     -configuration
+             Displays the image path, image  suffixes,  and  sup-
+             ported  filters  which will be used when looking for
+             and  reading  images.    These   are   loaded   from
+             ~/.xloadimagerc  and  optionally  from  a systemwide
+             file   (normally    /usr/lib/xloadimagerc).     This
+             replaces the -path option.
+
+     -default
+             Use the default  root  weave  as  the  image.   This
+             option  forces  -_o_n_r_o_o_t.  If -_d_e_f_a_u_l_t is used alone,
+             it is the same as _x_s_e_t_r_o_o_t with  no  arguments.   If
+             used  in  conjunction  with -_t_i_l_e this option can be
+             used to place images on the default root weave  (see
+             EXAMPLES below).
+
+     -debug  Talk to the X server in synchronous mode.   This  is
+             useful  for  debugging.  If an X error is seen while
+             in this mode, a core will be dumped.
+
+     -delay _s_e_c_s
+             Automatically advance to the next image  after  _s_e_c_s
+             seconds.
+
+     -display _d_i_s_p_l_a_y__n_a_m_e
+             X11 display name to send the image(s) to.
+
+     -dump _i_m_a_g_e__t_y_p_e[,_o_p_t_i_o_n[=_v_a_l_u_e]] _d_u_m_p__f_i_l_e
+             Rather than  displaying  the  loaded  and  processed
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                    2
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+             image,  dump  it into an image file of the specified
+             type.  For a list of image types that can be dumped,
+             use  the  -_s_u_p_p_o_r_t_e_d  option.  Some image types have
+             options that affect the format of  the  file  that's
+             created.   See  DUMP OPTIONS below.  An image can be
+             dumped in any supported dump  format  regardless  of
+             the original image type, so image file type transla-
+             tion is possible using this option.
+
+     -fit    Force image to use the default visual and  colormap.
+             This  is  useful  if  you  do  not  want technicolor
+             effects when the colormap focus is inside the  image
+             window,  but  it  may  reduce  the  quality  of  the
+             displayed image.  This is on by default  if  -onroot
+             or -windowid is specified.
+
+     -fork   Fork xloadimage.  This causes xloadimage to disasso-
+             ciate  itself from the shell.  This option automati-
+             cally turns on -quiet.
+
+     -fullscreen
+             Use the entire screen to display  images.   If  com-
+             bined with -onroot, the image will be zoomed to fill
+             the entire rootwindow.
+
+     -geometry _W_x_H[{+-_X}{+-}_Y]
+             This sets the size of  the  window  onto  which  the
+             images are loaded to a different value than the size
+             of the image.  When viewing an image  in  a  window,
+             this  can be used to reduce the size of the destina-
+             tion window.  When loading an image  onto  the  root
+             window,  this option controls the size of the pixmap
+             which will be loaded onto the root.  If the size  is
+             smaller  than that of the display, the image will be
+             replicated.
+
+     -goto image_name
+             Forces the next image to  be  displayed  to  be  the
+             image named _i_m_a_g_e__n_a_m_e.  This is useful for generat-
+             ing looped slideshows.  If more than  one  image  of
+             the  same  name as the target exists on the argument
+             list, the first in the argument list is used.
+
+     -help [option ...]
+             Give information on an option or  list  of  options.
+             If  no  option  is  given, a simple interactive help
+             facility is invoked.
+
+     -identify
+             Identify the supplied  images  rather  than  display
+             them.
+
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                    3
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+     -install
+             Forcibly install the image's colormap when the  win-
+             dow  is  focused.  This violates ICCCM standards and
+             only exists to allow  operation  with  naive  window
+             managers.   Use  this  option  only  if  your window
+             manager does not install colormaps properly.
+
+     -list   List the images which are along the image path.
+
+     -onroot Load image(s) onto the root window instead of  view-
+             ing in a window.  This option automatically sets the
+             -fit option.  This is the opposite of -_v_i_e_w.  _X_S_e_t_b_g
+             has this option set by default.
+
+     -path   Displays miscellaneous information about the program
+             configuration.  This option is obsolete and has been
+             replaced by -configuration.
+
+     -pixmap Force the use of a pixmap as backing-store.  This is
+             provided  for  servers where backing-store is broken
+             (such as some versions of  the  AIXWindows  server).
+             It  may  improve  scrolling  performance  on servers
+             which provide backing-store.
+
+     -private
+             Force the  use  of  a  private  colormap.   Normally
+             colors  are  allocated  shared  unless there are not
+             enough colors available.
+
+     -quiet  Forces _x_l_o_a_d_i_m_a_g_e and _x_v_i_e_w to be  quiet.   This  is
+             the default for _x_s_e_t_b_g, but the others like to whis-
+             tle.
+
+     -supported
+             List the supported image types.
+
+     -type _t_y_p_e__n_a_m_e
+             Forces _x_l_o_a_d_i_m_a_g_e to try to load the image as a par-
+             ticular file type rather than trying to guess.  This
+             often improves load performance noticably.
+
+     -verbose
+             Causes _x_l_o_a_d_i_m_a_g_e to be talkative, telling you  what
+             kind of image it's playing with and any special pro-
+             cessing that it has to do. This is the  default  for
+             _x_v_i_e_w and _x_l_o_a_d_i_m_a_g_e.
+
+     -version
+             Print the version number and patchlevel of this ver-
+             sion of _x_l_o_a_d_i_m_a_g_e.
+
+     -view   View image(s) in a window.  This is the opposite  of
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                    4
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+             -_o_n_r_o_o_t and the default for _x_v_i_e_w and _x_l_o_a_d_i_m_a_g_e.
+
+     -visual _v_i_s_u_a_l__n_a_m_e
+             Force the use of a specific visual type  to  display
+             an  image.   Normally  _x_l_o_a_d_i_m_a_g_e  tries to pick the
+             best available image for a  particular  image  type.
+             The   available   visual  types  are:   DirectColor,
+             TrueColor, PseudoColor, StaticColor, GrayScale,  and
+             StaticGray.  Nonconflicting names may be abbreviated
+             and case is ignored.
+
+     -windowid _h_e_x__w_i_n_d_o_w__i_d
+             Sets the background pixmap of  a  particular  window
+             ID.  The argument must be in hexadecimal and must be
+             preceeded by "0x" (_e_g -windowid 0x40000b.   This  is
+             intended  for  setting the background pixmap of some
+             servers which use untagged  virtual  roots  (_e_g  HP-
+             VUE), but can have other interesting applications.
+
+IMAGE OPTIONS
+     The following options may preceed each image.  These options
+     are local to the image they preceed.
+
+     -at _X,_Y
+          Indicates coordinates to load the image at on the  base
+          image.   If  this  is an option to the first image, and
+          the -_o_n_r_o_o_t option is  specified,  the  image  will  be
+          loaded at the given location on the display background.
+
+     -background _c_o_l_o_r
+          Use _c_o_l_o_r  as  the  background  color  instead  of  the
+          default  (usually  white  but this depends on the image
+          type) if you are transferring a monochrome image  to  a
+          color display.
+
+     -brighten _p_e_r_c_e_n_t_a_g_e
+          Specify a percentage multiplier  for  a  color  image's
+          colormap.   A  value  of more than 100 will brighten an
+          image, one of less than 100 will darken it.
+
+     -center
+          Center the image on the base image loaded.  If this  is
+          an option to the first image, and the -_o_n_r_o_o_t option is
+          specified, the image will be centered  on  the  display
+          background.
+
+     -clip _X,_Y,_W,_H
+          Clip the image before loading it.  _X and _Y  define  the
+          upper-left  corner of the clip area, and _W and _H define
+          the extents of the area.  A zero value for _W or _H  will
+          be interpreted as the remainder of the image.
+
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                    5
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+     -colors _n
+          Specify the maximum number of  colors  to  use  in  the
+          image.   This  is a way to forcibly reduce the depth of
+          an image.
+
+     -dither
+          Dither a color  image  to  monochrome  using  a  Floyd-
+          Steinberg dithering algorithm.  This happens by default
+          when viewing color  images  on  a  monochrome  display.
+          This  is  slower  than  -_h_a_l_f_t_o_n_e and affects the image
+          accuracy but usually looks much better.
+
+     -foreground _c_o_l_o_r
+          Use _c_o_l_o_r as the foreground color instead of  black  if
+          you  are  transferring  a  monochrome  image to a color
+          display.  This can also be used  to  invert  the  fore-
+          ground and background colors of a monochrome image.
+
+     -gamma _d_i_s_p_l_a_y__g_a_m_m_a
+          Specify the gamma  correction  for  the  display.   The
+          default  value  is  1.0, a typical display needs 2.0 to
+          2.5.
+
+     -global
+          Force the following  option  to  apply  to  all  images
+          rather  than  one  specific image.  Local image options
+          will temporarily override  any  option  specified  with
+          -global.
+
+     -gray
+          Convert an image to grayscale.   This  is  very  useful
+          when displaying colorful images on servers with limited
+          color capability.  It can also be  used  to  convert  a
+          bitmap  image  into  a  grayscale  image,  although the
+          resulting image will be smaller than the original.  The
+          optional spelling -_g_r_e_y may also be used.
+
+     -halftone
+          Force halftone dithering of a color image when display-
+          ing on a monochrome display.  This option is ignored on
+          monochrome images.  This dithering algorithm  blows  an
+          image  up by sixteen times; if you don't like this, the
+          -_d_i_t_h_e_r option will not blow the image up but will take
+          longer to process and will be less accurate.
+
+     -idelay _s_e_c_s
+          Set the delay to be used for this image to _s_e_c_s seconds
+          (see  -_d_e_l_a_y).  If -_d_e_l_a_y was specified, this overrides
+          it.  If it was not specified, this sets  the  automatic
+          advance delay for this image while others will wait for
+          the user to advance them.
+
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                    6
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+     -invert
+          Inverts a monochrome  image.   This  is  shorthand  for
+          -_f_o_r_e_g_r_o_u_n_d _w_h_i_t_e -_b_a_c_k_g_r_o_u_n_d _b_l_a_c_k.
+
+     -merge
+          Merge this image onto the base image after  local  pro-
+          cessing.   The base image is considered to be the first
+          image specified or the last image  that  was  not  pre-
+          ceeded  by -_m_e_r_g_e.  If used in conjunction with -_a_t and
+          -_c_l_i_p, very complex  images  can  be  built  up.   This
+          option  is  on by default for all images if the -_o_n_r_o_o_t
+          or -_w_i_n_d_o_w_i_d options are specified.
+
+     -name _i_m_a_g_e__n_a_m_e
+          Force the next argument to be treated as an image name.
+          This is useful if the name of the image is -_d_i_t_h_e_r, for
+          instance.
+
+     -newoptions
+          Reset globally-specified options.
+
+     -normalize
+          Normalize a color image.
+
+     -rotate _d_e_g_r_e_e_s
+          Rotate the image by _d_e_g_r_e_e_s clockwise.  The number must
+          be a multiple of 90.
+
+     -shrink
+          Shrink an image down to fit on the  display.   This  is
+          particularly  useful  with  servers that do not support
+          window  sizes  larger  than  the  physical  screen  (eg
+          DECWINDOWS servers).
+
+     -smooth
+          Smooth a color image.  This  reduces  blockiness  after
+          zooming  an  image  up.  If used on a monochrome image,
+          nothing happens.  This option can take awhile  to  per-
+          form, especially on large images.  You may specify more
+          than one -_s_m_o_o_t_h option  per  image,  causing  multiple
+          iterations of the smoothing algorithm.
+
+     -tile
+          Tile this image (after any necessary merging or tiling)
+          to  create a fullscreen image.  This is usually used to
+          create a large background image on which to merge other
+          images.   -_g_e_o_m_e_t_r_y  can  be  used to set the new image
+          size to something other than -fullscreen.
+
+     -title _t_i_t_l_e
+          Change the title of the image.  This sets the title bar
+          title  if displaying in a window or the NIFF file image
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                    7
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+          title if dumping the image.
+
+     -xzoom _p_e_r_c_e_n_t_a_g_e
+          Zoom the X axis of an image by  _p_e_r_c_e_n_t_a_g_e.   A  number
+          greater  than  100  will  expand the image, one smaller
+          will compress it.  A zero value will be ignored.   This
+          option,  and the related -_y_z_o_o_m are useful for correct-
+          ing the aspect ratio of images to be displayed.
+
+     -yzoom _p_e_r_c_e_n_t_a_g_e
+          Zoom the Y axis of an image by _p_e_r_c_e_n_t_a_g_e.  See  -_x_z_o_o_m
+          for more information.
+
+     -zoom _p_e_r_c_e_n_t_a_g_e
+          Zoom both the X and Y axes by _p_e_r_c_e_n_t_a_g_e.   See  -_x_z_o_o_m
+          for more information.  Technically the percentage actu-
+          ally zoomed is the square of the number supplied  since
+          the  zoom  is to both axes, but I opted for consistency
+          instead of accuracy.
+
+EXAMPLES
+     To load the rasterfile "my.image" onto  the  background  and
+     replicate it to fill the entire background:
+
+          xloadimage -onroot my.image
+
+     To center an image on the default root background:
+
+          xloadimage -default -tile my.image
+
+     If using a monochrome display and a  color  image  you  will
+     probably want to dither the image for a cleaner (and faster)
+     display:
+
+          xloadimage -default -tile -dither my.image
+
+     To load a monochrome image "my.image" onto  the  background,
+     using  red as the foreground color, replicate the image, and
+     overlay "another.image" onto it at coordinate (10,10):
+
+          xloadimage   -foreground   red   my.image   -at   10,10
+     another.image
+
+     To center the rectangular region from 10 to 110 along the  X
+     axis  and  from  10  to  the height of the image along the Y
+     axis:
+
+          xloadimage -center -clip 10,10,100,0 my.image
+
+     To double the size of an image:
+
+          xloadimage -zoom 200 my.image
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                    8
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+     To halve the size of an image:
+
+          xloadimage -zoom 50 my.image
+
+     To brighten a dark image:
+
+          xloadimage -brighten 150 my.image
+
+     To darken a bright image:
+
+          xloadimage -brighten 50 my.image
+
+HINTS FOR GOOD IMAGE DISPLAYS
+     Since images are likely to come from a variety  of  sources,
+     they  may  be in a variety of aspect ratios which may not be
+     supported by your display.  The -_x_z_o_o_m  and  -_y_z_o_o_m  options
+     can  be  used  to change the aspect ratio of an image before
+     display.  If you use these options, it is  recommended  that
+     you  increase  the  size of one of the dimensions instead of
+     shrinking the other, since  shrinking  looses  detail.   For
+     instance,  many  GIF  and G3 FAX images have an X:Y ratio of
+     about 2:1.  You can  correct  this  for  viewing  on  a  1:1
+     display  with  either -_x_z_o_o_m _5_0 or -_y_z_o_o_m _2_0_0 (reduce X axis
+     to 50% of its size and expand Y axis to 200%  of  its  size,
+     respectively)  but the latter should be used so no detail is
+     lost in the conversion.
+
+     When zooming color images up you can reduce blockiness  with
+     -_s_m_o_o_t_h.  For zooms of 300% or more, I recommend two smooth-
+     ing passes (although this can take  awhile  to  do  on  slow
+     machines).   There  will  be  a noticable improvement in the
+     image.
+
+     You can perform image processing on a small  portion  of  an
+     image  by  loading  the  image  more than once and using the
+     -_m_e_r_g_e, -_a_t and -_c_l_i_p options.  Load the image,  then  merge
+     it with a clipped, processed version of itself.  To brighten
+     a  100x100  rectangular  portion  of  an  image  located  at
+     (50,50), for instance, you could type:
+
+          xloadimage   my.image   -merge    -at    50,50    -clip
+     50,50,100,100 -brighten 150 my.image
+
+     If you're using a display with a small colormap  to  display
+     colorful  images,  try  using the -_g_r_a_y option to convert to
+     grayscale.
+
+PATHS AND EXTENSIONS
+     The file ~/.xloadimagerc (and optionally a system-wide file)
+     defines  a  number  of  configuration  options  that  affect
+     xloadimage.
+
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                    9
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+     This file is split into three section, the _p_a_t_h section, the
+     _e_x_t_e_n_s_i_o_n section, and the _f_i_l_t_e_r section.  The sections are
+     identified by typing the section name followed by an  equals
+     sign, eg "path =".
+
+     The _p_a_t_h statement is used to provide a set of search  paths
+     to  use  when  looking  for  an  image  of a specified name.
+     Separate each path in the list by whitespace (eg one or more
+     spaces,  tabs,  or  newlines).   The path is searched in the
+     order it is specified.  For example:
+
+       path = ~/images /usr/local/images ~fred
+
+     will first look for the image name you specified, then  look
+     for the name in ~/images (the tilde is expanded to the value
+     of $HOME), then in /usr/local/images, then  in  user  fred's
+     home directory.  This allows easy use of image repositories.
+
+     The _e_x_t_e_n_s_i_o_n statement is used to provide a set of  default
+     extensions  to  use when looking for an image of a specified
+     name.  Separate each extension in the  list  by  whitespace.
+     The  extensions  are searched in the order in which they are
+     specified.  For example:
+
+       extension = .gif .jpg
+
+     If you have a file named _m_y_i_m_a_g_e._g_i_f you could  specify  the
+     name  _m_y_i_m_a_g_e and xloadimage would append the ._g_i_f extension
+     automatically.
+
+     The _f_i_l_t_e_r statement is used to  describe  filter  programs,
+     such as "uncompress", which are to be applied to image files
+     automatically.  You  specify  one  filter  program  and  any
+     number  of  recognized  extensions following the _f_i_l_t_e_r key-
+     word.  For example:
+
+       filter = uncompress .Z
+
+     specifies that the program _u_n_c_o_m_p_r_e_s_s should be  used  as  a
+     filter  whenever  an  image  file  has  a  .Z extension.  By
+     default filters are provided for compressed (.Z)  files  and
+     GNU  zip  (.gz)  files.   See  the  FILTERS section for more
+     information on defining your own filters.
+
+     Any text on a line following a hash-mark (#) is ignored;  if
+     you  wish to use a hash-mark in a path, extension, or filter
+     you can escape it using a backslash (\).
+
+     If you wish to include white-space in a filter program name,
+     path,  or  extension  you  can  enclose  the  entire text in
+     double-quotes.  For example:
+
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                   10
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+       filter = "gzip -cd" .gz
+
+     Use backslash (\) characters to allow inclusion  of  double-
+     quote marks or newlines.
+
+     The following is a sample ~/.xloadimagerc file:
+
+       # paths to look for images in
+       path = /usr/local/images        # system image repository
+             ~/images                 # personal images
+             /usr/include/X11/bitmaps # standard X bitmaps
+
+       # default extensions for images
+       extension = .csun .msun .sun .face .xbm .bm
+
+       # invoke GNU zip if a .z or .zip extension is found
+       filter = "gzip -cd" .z .zip
+
+
+IMAGE TYPES
+     _X_l_o_a_d_i_m_a_g_e currently supports many common and some  uncommon
+     image  types, and can create images in several formats.  For
+     a complete list use the -_s_u_p_p_o_r_t_e_d option.
+
+DUMPING IMAGES
+     Several image dumpers are  included  that  can  be  used  to
+     create  a  new image after loading and processing.  The NIFF
+     (Native Image File  Format)  is  the  simplest  and  creates
+     images  that  _x_l_o_a_d_i_m_a_g_e  can read the fastest; it is essen-
+     tially a copy of the internal image format.
+
+     Some image dumpers allow options that affect the image  out-
+     put.  These options are appended to the image type following
+     a comma and are separated by commas.  If a value is  desired
+     it  can be specified following an equals-sign.  For example,
+     to create a monochrome JPEG image file with a quality factor
+     of 80, you would use the following command line:
+
+       xloadimage image_name -dump jpeg,quality=80,grayscale new_image.jpg
+
+     Option names can be abbreviated but if the  abbreviation  is
+     too  short  to  be  unique  the option which will be used is
+     indeterminate.
+
+FILTERS
+     Xloadimage supports automatic filtering by recognizing  file
+     extensions.   By  default  "compress"  and  "gzip" files are
+     recognized and their names passed to appropriate commands to
+     decompress them.
+
+     The  xloadimage  distribution  includes  a  special  "smart"
+     uudecoder, called _u_u_f_i_l_t_e_r that can be used to automatically
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                   11
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+     uudecode files for processing.  _U_u_f_i_l_t_e_r ignores  extraneous
+     lines  in the file so it is particularly useful if the uuen-
+     coded file was created by concatenating email or news  post-
+     ings that had headers or line-break indicators included.
+
+     To make use of _u_u_f_i_l_t_e_r you can add the following to your
+
+       filter = "uufilter -s" .uu .uue
+     The filter will be automatically invoked on any file with  a
+     .uu or
+
+     For a list of filters automatically recognized by xloadimage
+     use the -_c_o_n_f_i_g_u_r_a_t_i_o_n option.
+
+SUPPORTED IMAGE OPTIONS
+     The JPEG image dumper supports the following options:
+
+     arithmetic
+             Use arithmetic encoding.
+
+     grayscale
+             Force a monochrome (grayscale) image to  be  created
+             given a color image.
+
+     nointerleave
+             Create a non-interleaved file.
+
+     optimize
+             Enable entropy parameter optimization.
+
+     quality Adjust the quality of the image to be created.   The
+             default  quality  factor  is 75; lower values create
+             poorer images.
+
+     restart _i_n_t_e_r_v_a_l
+             Set the restart interval in MCU rows, or MCUs if 'b'
+             follows the interval value.
+
+     smooth _s_m_o_o_t_h_i_n_g__f_a_c_t_o_r
+             Set the smoothing factor.  Value should be between 0
+             and 100, inclusive.
+
+     If you are not familiar with the meaning  of  these  options
+     you  can  ask  the Independent JPEG Group (IJG) via email at
+     jpeg@cs.columbia.edu.
+
+     The PBM image dumper supports the following options:
+
+     normal  Dump a normal (ascii) PBM/PPM file.
+
+     raw     Dump a RawBits format PBM/PPM  file.   This  is  the
+             default  and  results in significantly smaller image
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                   12
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+             files than when using _n_o_r_m_a_l.
+
+     There is no way to dump a PGM format file or a "compact" PBM
+     format file (sorry).
+
+     The TIFF image dumper supports the following options:
+
+     compression
+             Image data compression technique.  Can  be  one  of:
+             _n_o_n_e  (no compression), _r_l_e (CCITT RLE compression),
+             _g_3_f_a_x (CCITT Group 3 FAX compression), _g_4_f_a_x  (CCITT
+             Group  4  FAX  compression),  _l_z_w  (Limpel-Ziv-Welsh
+             compression, the default), _j_p_e_g (JPEG  compression),
+             _n_e_x_t (NeXT run-length compression), _r_l_e_w (CCITT RLEW
+             compression), _m_a_c (Macintosh PackBits  compression),
+             _p_a_c_k_b_i_t_s  (same  as  _m_a_c),  _t_h_u_n_d_e_r_s_c_a_n (ThunderScan
+             compression).
+
+     _X_l_o_a_d_i_m_a_g_e  will  save  using  the  MINISBLACK,  MINISWHITE,
+     COLORMAP,  or RGB photometrics as appropriate for its inter-
+     nal image format.  There is no way to specify  a  particular
+     photometric or any other TIFF fields.
+
+AUTHOR
+     Jim Frost
+     CenterLine Software
+     jimf@centerline.com
+
+     For a  more-or-less  complete  list  of  other  contributors
+     (there  are  a  _l_o_t  of  them),  please  see the README file
+     enclosed with the distribution.
+
+FILES
+          xloadimage              - the image loader and viewer
+          xsetbg                  - pseudonym which quietly sets the background
+          xview                   - pseudonym which views in a window
+          /usr/lib/X11/Xloadimage - default system-wide configuration file
+          ~/.xloadimagerc         - user's personal configuration file
+
+COPYRIGHT
+     Copyright (c) 1989, 1993 Jim Frost and others.
+
+     _X_l_o_a_d_i_m_a_g_e is copywritten material with a very  loose  copy-
+     right  allowing  unlimited  modification and distribution if
+     the copyright notices are left intact.  Various portions are
+     copywritten by various people, but all use a modification of
+     the MIT copyright notice.  Please check the source for  com-
+     plete  copyright  information.   The  intent  is to keep the
+     source free, not to stifle its distribution, so please write
+     to me if you have any questions.
+
+
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                   13
+
+
+
+
+
+
+XLOADIMAGE(1)            USER COMMANDS              XLOADIMAGE(1)
+
+
+
+BUGS
+     Zooming dithered images, especially downwards, is UGLY.
+
+     Images can come in a variety of aspect  ratios.   _X_l_o_a_d_i_m_a_g_e
+     cannot  detect  what aspect ratio the particular image being
+     loaded has, nor the aspect ratio of the destination display,
+     so  images with differing aspect ratios from the destination
+     display will appear distorted.  See  _H_I_N_T_S  _F_O_R  _G_O_O_D  _I_M_A_G_E
+     _D_I_S_P_L_A_Y_S for more information.
+
+     The GIF format allows more than one image to be stored in  a
+     single GIF file, but _x_l_o_a_d_i_m_a_g_e will only display the first.
+
+     Only GIF87a format is supported.
+
+     One of the pseudonyms for _x_l_o_a_d_i_m_a_g_e,  _x_v_i_e_w,  is  the  same
+     name  as  Sun  uses for their SunView-under-X package.  This
+     will be confusing if you're one of those poor souls who  has
+     to use Sun's XView.
+
+     Some window managers do not  correctly  handle  window  size
+     requests.   In  particular,  many versions of the twm window
+     manager use the MaxSize hint  instead  of  the  PSize  hint,
+     causing  images  which are larger than the screen to display
+     in a window larger than the screen, something which is  nor-
+     mally avoided.  Some versions of twm also ignore the MaxSize
+     argument's real function, to limit the maximum size  of  the
+     window,  and  allow the window to be resized larger than the
+     image.  If this happens, _x_l_o_a_d_i_m_a_g_e merely places the  image
+     in  the  upper-left  corner of the window and uses the zero-
+     value'ed pixel for any space which is  not  covered  by  the
+     image.   This behavior is less-than-graceful but so are win-
+     dow managers which are cruel enough to ignore such details.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sun Release 4.1      Last change: 8 May 1991                   14
+
+
+
